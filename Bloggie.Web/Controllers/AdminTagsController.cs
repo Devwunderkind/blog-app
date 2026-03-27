@@ -68,7 +68,7 @@ namespace Bloggie.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditTagRequest editTagRequest)
         {
-            // 1. Map the ViewModel back to a Domain Model
+            
             var tag = new Tag
             {
                 Id = editTagRequest.Id,
@@ -76,21 +76,20 @@ namespace Bloggie.Web.Controllers
                 DisplayName = editTagRequest.DisplayName
             };
 
-            // 2. Find the existing tag in the DB
+            
             var existingTag = await bloggieDbContext.Tags.FindAsync(tag.Id);
 
             if (existingTag != null)
             {
-                // 3. Update the values
+                
                 existingTag.Name = tag.Name;
                 existingTag.DisplayName = tag.DisplayName;
 
-                // 4. Save Changes
+                
                 await bloggieDbContext.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Tag updated successfully!";
 
-                // 5. Redirect back to the list
                 return RedirectToAction("List");
             }
 
@@ -109,11 +108,9 @@ namespace Bloggie.Web.Controllers
 
                 TempData["DeletedMessage"] = "Tag was deleted successfully.";
 
-                // Redirect to List after deletion
                 return RedirectToAction("List");
             }
 
-            // If tag wasn't found, just go back to edit anyway
             return RedirectToAction("Edit", new {id = editTagRequest.Id});
         }
     }
